@@ -11,7 +11,7 @@ from aiohttp import web
 
 # Konfiguratsiya
 BOT_TOKEN = "8949788569:AAGNahSae9Hyc_CHYnqE1qFd-xW84YDO_y8"
-CLICK_TOKEN = "YOUR_CLICK_PROVIDER_TOKEN"  
+CLICK_TOKEN = "3828182:TEST:1234"  
 ADMIN_ID = 7800449398
 
 logging.basicConfig(level=logging.INFO)
@@ -186,11 +186,16 @@ async def handle(request):
     return web.Response(text="Bot is Live!")
 
 async def main():
+    import os
     app = web.Application()
     app.router.add_get("/", handle)
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", 8080)
+    
+    # Render uchun portni dinamik olish (8080 o'rniga)
+    port = int(os.environ.get("PORT", 10000)) 
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    
     await site.start()
     await dp.start_polling(bot)
 
