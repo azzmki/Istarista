@@ -18,12 +18,27 @@ logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
-
-# DB Sozlamalari
+# DB Sozlamalari (Xatosiz variant)
 conn = sqlite3.connect("stars_bot.db")
 cursor = conn.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id INTEGER PRIMARY KEY, uzs_balance REAL DEFAULT 0, stars_balance REAL DEFAULT 0)")
-cursor.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
+
+# Jadvallarni alohida-alohida va xavfsiz yaratamiz
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY, 
+    uzs_balance REAL DEFAULT 0, 
+    stars_balance REAL DEFAULT 0
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY, 
+    value TEXT
+)
+""")
+
+# Karta raqamini xavfsiz tekshirib qo'shish
 cursor.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('card_number', '8600 0000 0000 0000')")
 conn.commit()
 
